@@ -1,0 +1,2 @@
+FONT_FAMILY = "Montserat"
+FONT_SIZE = 15
