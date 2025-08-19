@@ -1,8 +1,15 @@
-from image import Image
+from PyQt6.QtWidgets import QApplication
+import sys
+
+from interface import mainWin
 
 def run():
-    img = Image("test_img.png")
-    img.resize(100, 500)
+    app = QApplication(sys.argv)
+
+    win = mainWin.MainWindow()
+    win.show()
+
+    app.exec()
 
 if __name__ == "__main__":
     run()
