@@ -3,8 +3,9 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 import os
 
-from . import errorWin
 from .config import *
+from . import errorWin
+from . import imageExportWin
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -85,9 +86,10 @@ class MainWindow(QMainWindow):
         self.clear_button.deleteLater()
 
     def convert_file_as(self):
-        if len(self.file_path) == 0:
+        '''if len(self.file_path) == 0:
             erw = errorWin.ErrorWindow("Missing files", "You have not selected files")
             erw.exec()
-            return
+            return'''
         
-        
+        iew = imageExportWin.ImageExport()
+        iew.exec()

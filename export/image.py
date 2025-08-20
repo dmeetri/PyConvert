@@ -10,10 +10,6 @@ class ImageProcessor:
         self.fmt = fmt.upper()
         self.resize = resize
         self.alpha = alpha
-            
-        #self.name, self.ext = os.path.splitext(self.img.filename)
-        #self.img.save(f"{self.name}.{to}", format=to.upper(), quality=1)
-        #self.img.save(f"{self.name}_resized{self.ext}")
     
     def _crop(self):
         pass
@@ -32,3 +28,5 @@ class ImageProcessor:
                 image = image.resize((self.width, self.height))
             '''else:
                 self._crop()'''
+            
+            image.save(f"{file}_edit.{self.fmt}", format=self.fmt)
