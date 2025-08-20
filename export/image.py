@@ -3,30 +3,32 @@ import os
 from PIL import Image as img
 
 class ImageProcessor:
-    def __init__(self, path: list, width: int, height: int, fmt: str, resize: bool, alpha: bool):
-        self.path = path
-        self.width = width
-        self.height = height
-        self.fmt = fmt.upper()
-        self.resize = resize
-        self.alpha = alpha
+    def __init__(self, path: str):
+        self.image = img.open(path)
     
-    def _crop(self):
+    def resize(self, width, height):
         pass
 
-    def expor(self):
-        all_images = self.path.copy()
-        for file in all_images:
-            image = img.open(file)
+    def crop(self, width, height):
+        pass
 
-            if self.fmt.lower() in ["jpeg", "jpg"] and image.mode == "RGBA":
-                image = image.convert("RGB")
-            elif self.fmt.lower == "png" and image.mode == "RGBA" and not self.alpha:
-                image = image.convert("RGB")
+    '''def expor(self, format):
+        if self.fmt.lower() in ["jpeg", "jpg"] and self.image.mode == "RGBA":
+            self.image = self.image.convert("RGB")
+        elif self.fmt.lower == "png" and self.image.mode == "RGBA" and not self.alpha:                
+            self.image = self.image.convert("RGB")
 
-            if self.resize:
-                image = image.resize((self.width, self.height))
-            '''else:
-                self._crop()'''
+        if self.resize:
+            self.image = self.image.resize((self.width, self.height))
+        else:
+            self._crop()
             
-            image.save(f"{file}_edit.{self.fmt}", format=self.fmt)
+        self.image.save(f"{self.image}_edit.{self.fmt}", format=self.fmt)'''
+
+    @property
+    def get_size(self) -> tuple:
+        return self.image.size
+    
+    @property
+    def get_exif(self) -> img.Exif:
+        return self.image.getexif()

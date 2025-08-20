@@ -86,10 +86,11 @@ class MainWindow(QMainWindow):
         self.clear_button.deleteLater()
 
     def convert_file_as(self):
-        '''if len(self.file_path) == 0:
+        if not self.file_path:
             erw = errorWin.ErrorWindow("Missing files", "You have not selected files")
             erw.exec()
-            return'''
+            return
         
-        iew = imageExportWin.ImageExport()
-        iew.exec()
+        for img in self.file_path:
+            iew = imageExportWin.ImageExport(img)
+            iew.exec()
