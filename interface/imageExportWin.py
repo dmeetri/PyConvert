@@ -1,28 +1,25 @@
-from PyQt6.QtWidgets import QDialog, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QComboBox, QFrame, QCheckBox, QLineEdit
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import QDialog, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QComboBox, QFrame, QCheckBox, QLineEdit, QFileDialog
+from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QFont
 
-from .config import *
+from .errorWin import show_error
 from export.image import ImageProcessor
 
 class ImageExport(QDialog):
     def __init__(self, path):
         super().__init__()
+        self.save_path = ''
         self.img = ImageProcessor(path)
         self.width, self.height = self.img.get_size
 
-        self.setWindowTitle("Export as")
+        self.setWindowTitle('Export as')
         self.setMinimumSize(QSize(300, 600))
 
-        font = QFont(FONT_FAMILY, FONT_SIZE)
-        self.setFont(font)
-
         main_l = QVBoxLayout()
-        main_l.setSpacing(SPACING)
 
         #format
         format_l = QVBoxLayout()
-        format_label = QLabel("format")
+        format_label = QLabel('format')
         select_export_format = QComboBox()
         select_export_format.addItems(['.png', '.jpg', 'bmp'])
         select_export_format.activated.connect(self.activated_format)
@@ -36,21 +33,21 @@ class ImageExport(QDialog):
 
         #image size
         main_image_size_l = QVBoxLayout()
-        image_size_label = QLabel("image size")
+        image_size_label = QLabel('image size')
 
         image_width_l = QHBoxLayout()
-        image_width_label = QLabel("width")
-        image_width_edit = QLineEdit()
-        image_width_edit.setText(str(self.width))
+        image_width_label = QLabel('width')
+        self.image_width_edit = QLineEdit()
+        self.image_width_edit.setText(str(self.width))
         image_width_l.addWidget(image_width_label)
-        image_width_l.addWidget(image_width_edit)
+        image_width_l.addWidget(self.image_width_edit)
 
         image_height_l = QHBoxLayout()
-        image_height_label = QLabel("height")
-        image_height_edit = QLineEdit()
-        image_height_edit.setText(str(self.height))
+        image_height_label = QLabel('height')
+        self.image_height_edit = QLineEdit()
+        self.image_height_edit.setText(str(self.height))
         image_height_l.addWidget(image_height_label)
-        image_height_l.addWidget(image_height_edit)
+        image_height_l.addWidget(self.image_height_edit)
 
         line2 = QFrame()
         line2.setFrameShape(QFrame.Shape.HLine)
@@ -62,9 +59,9 @@ class ImageExport(QDialog):
 
         #Export/Cancel
         next_btns = QHBoxLayout()
-        cancel_btn = QPushButton("Cancel")
+        cancel_btn = QPushButton('Cancel')
         cancel_btn.clicked.connect(self.cancel)
-        export_btn = QPushButton("Export")
+        export_btn = QPushButton('Export')
         export_btn.clicked.connect(self.export)
         next_btns.addWidget(cancel_btn)
         next_btns.addWidget(export_btn)
@@ -83,4 +80,11 @@ class ImageExport(QDialog):
         self.hide()
 
     def export(self):
-        pass
+        self.save_path = QFileDialog.getExistingDirectory(None, 'Select folder')
+        if self.save_path:
+            try:
+                self.img.resize(int(self.image_width_edit.text()), int(self.image_height_edit.text()))
+                self.img.save(self.save_path)
+                self.hide()
+            except (ValueError, TypeError):
+                show_error('Format error', 'One of the parameters was entered incorrectly')
